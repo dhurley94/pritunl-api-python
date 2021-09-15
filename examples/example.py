@@ -1,6 +1,6 @@
 #!/bin/bash
 
-from config import pri as pri
+from config import pritunl as pri
 
 # Ping host
 if pri.ping():
@@ -31,10 +31,18 @@ if pri.ping():
     q = pri.user.get(org_id=x[0]['id'])
 
     # Delete users
-    pri.user.delete(org_id=x[0]['id'], user_id=q[1]['id'])
+    pri.user.delete(org_id=x[0]['id'], usr_id=q[1]['id'])
 
     # Get user key download link
     z = pri.key.get(org_id=x[0]['id'], usr_id=q[0]['id'])
-
     print(z)
+
+    # Delete key
+    pri.user.delete(org_id=x[0]['id'], usr_id=q[0]['id'])
+
+    # Delete server
+    pri.server.delete(srv_id=s[0]['id'])
+
+    # Delete organization
+    pri.organization.delete(org_id=x[0]['id'])
 

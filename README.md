@@ -8,6 +8,14 @@ idea on how to use this.
 Basically this api client use almost same command like in the doc.
 For example:
 
+TODO:
+- write tests
+- document functions
+
+## Retrieve API Token
+
+Administrators => User => Enable API Tokens
+
 ## Examples
 
 * Example 1
