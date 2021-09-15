@@ -4,7 +4,6 @@ from config import pritunl as pri
 
 # Ping host
 if pri.ping():
-
     # Create server
     pri.server.post(data={'name': 'EXAMPLE_SERVER'})
 
@@ -21,6 +20,25 @@ if pri.ping():
     pri.server.put(srv_id=s[0]['id'], org_id=x[0]['id'])
 
     # Start server
+    pri.server.put(srv_id=s[0]['id'], operation='start')
+    pri.server.put(srv_id=s[0]['id'], operation='stop')
+
+    s = pri.server.get()
+
+    # Create a custom route
+    pri.route.post(srv_id=s[0]['id'], data={
+        "network": "192.168.1.0/24",
+        "comment": "Testing comments",
+        "metric": 2,
+        "nat": True,
+        "nat_interface": "",  # optional
+        "nat_netmap": "",  # map two pritunl servers
+        "advertise": False,
+        # "vpc_region": "",
+        # "vpc_id": "",
+        "net_gateway": False
+    })
+
     pri.server.put(srv_id=s[0]['id'], operation='start')
 
     # Add users to org[0]
@@ -45,4 +63,3 @@ if pri.ping():
 
     # Delete organization
     pri.organization.delete(org_id=x[0]['id'])
-

@@ -29,13 +29,17 @@ class Pritunl:
         self.API_TOKEN = token
         self.API_SECRET = secret
 
-        # Sub classes
         self.api_caller = APICaller(base_url=self.BASE_URL, api_token=self.API_TOKEN, api_secret=self.API_SECRET)
+
+        # Sub classes
         self.server = self.Server(self)
         self.organization = self.Organization(self)
         self.user = self.User(self)
         self.key = self.Key(self)
         self.log = self.Log(self)
+        self.link = self.Link(self)
+        self.host = self.Host(self)
+        self.route = self.Route(self)
 
     class Key:
         def __init__(self, root):
@@ -88,6 +92,9 @@ class Pritunl:
             return self.r
 
     class Organization:
+        """
+        Represents a Pritunl organization
+        """
         def __init__(self, root):
             self.r = None
             self.data_template = {
@@ -135,6 +142,10 @@ class Pritunl:
 
     class Server:
         def __init__(self, root):
+            """
+            The root Pritunl object
+            :param root:
+            """
             self.r = None
             self.root = root
             self.data_template = {
@@ -229,133 +240,131 @@ class Pritunl:
                                                    data=self.data_template)
             return self.r
 
-        class Route:
-            def __init__(self, root):
-                self.r = None
-                self.root = root
-                self.data_template = {
-                    "network": "",
-                    "comment": "",
-                    "metric": 2,
-                    "nat": True,
-                    "nat_interface": "",  # optional
-                    "nat_netmap": "",  # map two pritunl servers
-                    "advertise": False,
-                    "vpc_region": "",
-                    "vpc_id": "",
-                    "net_gateway": False
-                }
-                self.api_caller = root.api_caller
+    class Route:
+        def __init__(self, root):
+            self.r = None
+            self.root = root
+            self.data_template = {
+                "network": "",
+                "comment": "",
+                "metric": 2,
+                "nat": True,
+                "nat_interface": "",  # optional
+                "nat_netmap": "",  # map two pritunl servers
+                "advertise": False,
+                "net_gateway": False
+            }
+            self.api_caller = root.api_caller
 
-            def get(self, srv_id=None):
-                """
+        def get(self, srv_id=None):
+            """
 
-                :param srv_id:
-                :return:
-                """
-                self.r = self.api_caller.call(method="GET", path="server/{0}/route".format(srv_id))
-                return self.r
+            :param srv_id:
+            :return:
+            """
+            self.r = self.api_caller.call(method="GET", path="server/{0}/route".format(srv_id))
+            return self.r
 
-            def post(self, srv_id=None, data=None):
-                """
+        def post(self, srv_id=None, data=None):
+            """
 
-                :param srv_id:
-                :param data:
-                :return:
-                """
-                self.data_template.update(data)
-                self.r = self.api_caller.call(method="POST", path="server/{0}/route".format(srv_id),
-                                              data=self.data_template)
-                return self.r
+            :param srv_id:
+            :param data:
+            :return:
+            """
+            self.data_template.update(data)
+            self.r = self.api_caller.call(method="POST", path="server/{0}/route".format(srv_id),
+                                          data=self.data_template)
+            return self.r
 
-            def put(self, srv_id=None, route_net=None, data=None):
-                """
+        def put(self, srv_id=None, route_net=None, data=None):
+            """
 
-                :param srv_id:
-                :param route_net:
-                :param data:
-                :return:
-                """
-                self.data_template.update(data)
-                self.r = self.api_caller.call(method="PUT", path="server/{0}/route/{1}".format(srv_id, route_net),
-                                              data=self.data_template)
-                return self.r
+            :param srv_id:
+            :param route_net:
+            :param data:
+            :return:
+            """
+            self.data_template.update(data)
+            self.r = self.api_caller.call(method="PUT", path="server/{0}/route/{1}".format(srv_id, route_net),
+                                          data=self.data_template)
+            return self.r
 
-            def delete(self, srv_id=None, route_net=None):
-                """
+        def delete(self, srv_id=None, route_net=None):
+            """
 
-                :param srv_id:
-                :param route_net:
-                :param data:
-                :return:
-                """
+            :param srv_id:
+            :param route_net:
+            :param data:
+            :return:
+            """
 
-                self.r = self.api_caller.call(method="DELETE", path="server/{0}/route/{1}".format(srv_id, route_net))
-                return self.r
+            self.r = self.api_caller.call(method="DELETE", path="server/{0}/route/{1}".format(srv_id, route_net))
+            return self.r
 
-        class Host:
-            def __init__(self, root):
-                self.r = None
-                self.root = root
-                self.api_caller = root.api_caller
+    class Host:
+        def __init__(self, root):
+            self.r = None
+            self.root = root
+            self.api_caller = root.api_caller
 
-            def get(self, srv_id=None):
-                """
+        def get(self, srv_id=None):
+            """
 
-                :param srv_id:
-                :return:
-                """
-                self.r = self.api_caller.call(method="GET", path="server/{0}/host".format(srv_id))
-                return self.r
+            :param srv_id:
+            :return:
+            """
+            self.r = self.api_caller.call(method="GET", path="server/{0}/host".format(srv_id))
+            return self.r
 
-            def put(self, srv_id=None, host_id=None):
-                """
+        def put(self, srv_id=None, host_id=None):
+            """
 
-                :param srv_id:
-                :param host_id:
-                :return:
-                """
-                self.r = self.api_caller.call(method="PUT", path="server/{0}/host/{1}".format(srv_id, host_id))
-                return self.r
+            :param srv_id:
+            :param host_id:
+            :return:
+            """
+            self.r = self.api_caller.call(method="PUT", path="server/{0}/host/{1}".format(srv_id, host_id))
+            return self.r
 
-            def delete(self, srv_id=None, host_id=None):
-                """
+        def delete(self, srv_id=None, host_id=None):
+            """
 
-                :param srv_id:
-                :param host_id:
-                :return:
-                """
-                self.r = self.api_caller.call(method="DELETE", path="server/{0}/host/{1}".format(srv_id, host_id))
-                return self.r
+            :param srv_id:
+            :param host_id:
+            :return:
+            """
+            self.r = self.api_caller.call(method="DELETE", path="server/{0}/host/{1}".format(srv_id, host_id))
+            return self.r
 
-        class Link:
-            def __init__(self, root):
-                self.r = None
-                self.root = root
-                self.api_caller = root.api_caller
+    class Link:
+        def __init__(self, root):
+            self.r = None
+            self.root = root
+            self.api_caller = root.api_caller
 
-            def get(self, srv_id=None):
-                """
+        def get(self, srv_id=None):
+            """
 
-                :param srv_id:
-                :return:
-                """
-                self.r = self.api_caller.call(method="GET", path="server/{0}/link".format(srv_id))
-                return self.r
+            :param srv_id:
+            :return:
+            """
+            self.r = self.api_caller.call(method="GET", path="server/{0}/link".format(srv_id))
+            return self.r
 
-        class Bandwidth:
-            def __init__(self, root):
-                self.r = None
-                self.root = root
-                self.api_caller = root.api_caller
+    class Bandwidth:
+        def __init__(self, root):
+            self.r = None
+            self.root = root
+            self.api_caller = root.api_caller
 
-            def get(self, srv_id=None, period="300"):
-                """
+        def get(self, srv_id=None, period="300"):
+            """
 
-                :return:
-                """
-                self.r = self.api_caller.call(method="GET", path="server/{0}/bandwidth/{1}".format(srv_id, period))
-                return self.r
+            :return:
+            """
+            self.r = self.api_caller.call(method="GET", path="server/{0}/bandwidth/{1}".format(srv_id, period))
+            return self.r
 
     class Log:
         def __init__(self, root):
