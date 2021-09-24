@@ -8,7 +8,7 @@ setuptools.setup(
     version="0.0.1",
     author="Dave Hurley",
     author_email="drhurley94@gmail.com",
-    description="A simple Pritunl API wrapper",
+    description="A simple Pritunl API wrapper. Forked from https://github.com/ijat/pritunl-api-python",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="github.com/dhurley94/pritunl-api-python",

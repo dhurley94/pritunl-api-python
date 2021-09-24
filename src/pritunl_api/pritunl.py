@@ -247,7 +247,7 @@ class Pritunl:
             self.data_template = {
                 "network": "",
                 "comment": "",
-                "metric": 2,
+                "metric": 0,
                 "nat": True,
                 "nat_interface": "",  # optional
                 "nat_netmap": "",  # map two pritunl servers
